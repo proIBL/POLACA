@@ -44,11 +44,33 @@ char* Paso1(char *Q, struct pila *pila){
     return Q2;
 }
 
+void Paso2(char *Q, struct pila *pila){
+    int i;
+    
+    for (i = 0; i < strlen(Q); i++){
+        if (Q[i] >= '0' && Q[i] <= '9'){
+            printf("Este es un numero\n");
+        }
+        else if(Q[i] == '('){
+            printf("Este es un parentesis izquierdo\n");
+        }
+        else if(Q[i] == '+' || Q[i] == '-' || Q[i] == '*' || Q[i] == '/' || Q[i] == '^'){
+            printf("Este es un operador\n");
+        }
+        else if(Q[i] == ')'){
+            printf("Este es un parentesis cerrando\n");
+        }
+        else{
+            printf("Esto no sabemos que es\n");
+        }
+    }
+}
+
 void POLACA(char *Q){
     struct pila pila;
     crearpila(&pila);
     Q = Paso1(Q, &pila);
-    
+    Paso2(Q, &pila);
     printf("%s\n", Q);
 }
 
