@@ -53,16 +53,19 @@ char* Paso3(char *P,char caracter){
     return nueva_cadena;
 }
 
+void Paso4(struct pila *pila){
+    insertar(pila,'(');
+}
+
 void Paso2(char *Q, char *P, struct pila *pila){
     int i;
     
     for (i = 0; i < strlen(Q); i++){
         if (Q[i] >= '0' && Q[i] <= '9'){
             P = Paso3(P, Q[i]);
-            printf("Este es un numero\n");
         }
         else if(Q[i] == '('){
-            printf("Este es un parentesis izquierdo\n");
+            Paso4(pila);
         }
         else if(Q[i] == '+' || Q[i] == '-' || Q[i] == '*' || Q[i] == '/' || Q[i] == '^'){
             printf("Este es un operador\n");
