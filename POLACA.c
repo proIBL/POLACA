@@ -44,11 +44,21 @@ char* Paso1(char *Q, struct pila *pila){
     return Q2;
 }
 
-void Paso2(char *Q, struct pila *pila){
+char* Paso3(char *P,char caracter){
+    
+    char *nueva_cadena = (char *)malloc((strlen(P) + 1) * sizeof(char));
+    strcpy(nueva_cadena, P);
+    nueva_cadena[strlen(P)] = caracter;
+    
+    return nueva_cadena;
+}
+
+void Paso2(char *Q, char *P, struct pila *pila){
     int i;
     
     for (i = 0; i < strlen(Q); i++){
         if (Q[i] >= '0' && Q[i] <= '9'){
+            P = Paso3(P, Q[i]);
             printf("Este es un numero\n");
         }
         else if(Q[i] == '('){
@@ -64,13 +74,17 @@ void Paso2(char *Q, struct pila *pila){
             printf("Esto no sabemos que es\n");
         }
     }
+    printf("%s\n", P);
 }
 
 void POLACA(char *Q){
     struct pila pila;
     crearpila(&pila);
+    char *P = "";
+    
     Q = Paso1(Q, &pila);
-    Paso2(Q, &pila);
+    Paso2(Q, P, &pila);
+    
     printf("%s\n", Q);
 }
 
