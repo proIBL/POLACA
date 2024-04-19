@@ -32,10 +32,19 @@ void insertar(struct pila *pila,char elemento){
 }
 
 void eliminarcima(struct pila *pila){
-    Nodo *top;
+    struct nodo *top;
     top= pila->cima;
     pila->cima = top->siguiente;
     free(top);
+}
+
+int tamanopila(struct pila *pila){
+    struct nodo *temp;
+    int cantidadelementos=0;
+    for(temp=pila->cima; temp != NULL; temp=temp->siguiente){
+        cantidadelementos++;
+    }
+    return cantidadelementos;
 }
 
 char* Paso1(char *Q, struct pila *pila){
@@ -60,12 +69,57 @@ char* Paso3(char *P,char caracter){
     char *nueva_cadena = (char *)malloc((strlen(P) + 1) * sizeof(char));
     strcpy(nueva_cadena, P);
     nueva_cadena[strlen(P)] = caracter;
-    
     return nueva_cadena;
 }
 
 void Paso4(struct pila *pila){
     insertar(pila,'(');
+}
+
+char* Paso5(struct pila *pila, char operador,char *P){
+    if(operador == '+' || operador == '-'){
+        while(elementocima(pila) == '+' || elementocima(pila) == '-' || elementocima(pila) == '/' || elementocima(pila) == '*' || elementocima(pila) == '^'){
+            char *nueva_cadena = (char *)malloc((strlen(P) + 1) * sizeof(char));
+            strcpy(nueva_cadena, P);
+            nueva_cadena[strlen(P)] = elementocima(pila);
+            P = nueva_cadena;
+            eliminarcima(pila);
+        }
+    }
+    else if(operador == '*' || operador == '/'){
+        while(elementocima(pila) == '/' || elementocima(pila) == '*' || elementocima(pila) == '^'){
+            char *nueva_cadena = (char *)malloc((strlen(P) + 1) * sizeof(char));
+            strcpy(nueva_cadena, P);
+            nueva_cadena[strlen(P)] = elementocima(pila);
+            P = nueva_cadena;
+            eliminarcima(pila);
+        }
+    }else if(operador == '^'){
+        while(elementocima(pila) == '^'){
+            char *nueva_cadena = (char *)malloc((strlen(P) + 1) * sizeof(char));
+            strcpy(nueva_cadena, P);
+            nueva_cadena[strlen(P)] = elementocima(pila);
+            P = nueva_cadena;
+            eliminarcima(pila);
+        }
+    }
+    insertar(pila,operador);
+    return P;
+}
+
+char* Paso6(struct pila *pila, char *P){
+    
+    while(elementocima(pila) == '+' || elementocima(pila) == '-' || elementocima(pila) == '/' || elementocima(pila) == '*' || elementocima(pila) == '^'){
+        char *nueva_cadena = (char *)malloc((strlen(P) + 1) * sizeof(char));
+        strcpy(nueva_cadena, P);
+        nueva_cadena[strlen(P)] = elementocima(pila);
+        P = nueva_cadena;
+        eliminarcima(pila);
+    }
+    if(elementocima(pila) == '('){
+        eliminarcima(pila);
+    }
+    return P;
 }
 
 void Paso2(char *Q, char *P, struct pila *pila){
@@ -79,16 +133,17 @@ void Paso2(char *Q, char *P, struct pila *pila){
             Paso4(pila);
         }
         else if(Q[i] == '+' || Q[i] == '-' || Q[i] == '*' || Q[i] == '/' || Q[i] == '^'){
-            printf("Este es un operador\n");
+            P = Paso5(pila, Q[i], P);
         }
         else if(Q[i] == ')'){
-            printf("Este es un parentesis cerrando\n");
+            P = Paso6(pila, P);
         }
         else{
             printf("Esto no sabemos que es\n");
         }
+        
     }
-    printf("%s\n", P);
+    printf("%s\n",P);
 }
 
 void POLACA(char *Q){
@@ -98,8 +153,6 @@ void POLACA(char *Q){
     
     Q = Paso1(Q, &pila);
     Paso2(Q, P, &pila);
-    
-    printf("%s\n", Q);
 }
 
 int main()
