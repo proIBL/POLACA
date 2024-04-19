@@ -19,12 +19,23 @@ int pilavacia(struct pila *pila){
     return (pila -> cima == NULL);
 }
 
+char elementocima(struct pila *pila){
+    return pila->cima->elemento;
+}
+
 void insertar(struct pila *pila,char elemento){
     struct nodo *nuevo;
     nuevo = (struct nodo *)malloc(sizeof(struct nodo));
     nuevo -> elemento = elemento;
     nuevo -> siguiente = pila -> cima;
     pila -> cima = nuevo;
+}
+
+void eliminarcima(struct pila *pila){
+    Nodo *top;
+    top= pila->cima;
+    pila->cima = top->siguiente;
+    free(top);
 }
 
 char* Paso1(char *Q, struct pila *pila){
